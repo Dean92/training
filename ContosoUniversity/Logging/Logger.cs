@@ -73,7 +73,7 @@ namespace ContosoUniversity.Logging
             sb.Append(string.Format(fmt, vars));
             sb.Append(" Exception: ");
             sb.Append(exception.ToString());
-            return sb.ToString
+            return sb.ToString();
         }
         
     }

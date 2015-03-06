@@ -58,10 +58,25 @@ namespace ContosoUniversity.DAL
         }
 
         //1st Public Override on Page 82
-       
-        
 
+        public override void ReaderExecuting(DbCommand command, DbCommandInterceptionContext<DbDataReader> interceptionContext)
+        {
+            base.ReaderExecuting(command, interceptionContext);
+            _stopwatch.Restart();
+        }
 
-
+        public override void ReaderExecuted(DbCommand command, DbCommandInterceptionContext<DbDataReader> interceptionContext)
+        {
+            _stopwatch.Stop();
+            if (interceptionContext.Exception != null)
+            {
+                _logger.Error(interceptionContext.Exception, "Error executing command: {0}", command.CommandText);
+            }
+            else
+            {
+                _logger.TraceApi("SQL Database", "SchoolInterceptor.ReaderExecuted", _stopwatch.Elapsed, "Command: {0}:", command.CommandText);
+            }
+            base.ReaderExecuted(command, interceptionContext);
+        }
     }
 }
